@@ -1,0 +1,48 @@
+def delete_student(id):
+    found = False
+    for student in students:
+        if student['id'] == id:
+            found = True
+            print(f"student with ID={id} deleted")
+            students.remove(student)
+            break
+    if not found:
+        print("This ID not found")
+
+
+def view_students():
+    if len(students) != 0:
+        for student in students:
+            # printing students and ding some foramat
+            print(f"{students.index(student) + 1}- Name:{student['name']:<10}"
+                  f"Age:{student['age']:<5}Grade:{student['grade']:<5}ID:{student['id']:<5}")
+    else:
+        print("No students to print! ")
+
+
+students = [
+    {'name': 'John', 'age': 18, 'grade': 'A', 'id': 1},
+    {'name': 'Emma', 'age': 17, 'grade': 'B', 'id': 2},
+    {'name': 'Michael', 'age': 16, 'grade': 'C', 'id': 3}
+]
+
+while True:
+    
+    try:
+        choise = int(input("What do you want to do?? (press 1- to Add Student ,2-View Students"
+                           " \n,3-Search Student ,4-Update Student Details ,5-Delete Student "
+                           ",\n6-Save to File ,7-Load from File)("
+                           "(-1 to quiet)):"))
+        if choise == -1:
+            break
+        elif choise == 2:
+            print("------------------------------------")
+            view_students()
+            print("------------------------------------")
+        elif choise == 5:
+            your_id = int(input("Enter id you want to delete??"))
+            delete_student(your_id)
+        else:
+            print(" you input is wrong!!")
+    except ValueError:
+        print(" you input is wrong!!")
