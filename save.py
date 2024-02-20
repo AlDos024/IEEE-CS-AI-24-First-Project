@@ -1,5 +1,5 @@
 import json
-
+import os
 id = 0
 
 students = {
@@ -18,9 +18,17 @@ def save():
 def load():
     global students
     global id
-    with open("tmp.json") as f:
-        students = json.load(f)
-    id = list(students.keys())[-1]
+    if os.path.exists('tmp.json'):
+        with open("tmp.json") as f:
+            # check if there is data in file
+            try:
+                students = json.load(f)
+                id = list(students.keys())[-1]
+            except Exception:
+                print("Nothing to load")
+                
+    else:
+        print("Nothing to load ...")
 
 
 load()
