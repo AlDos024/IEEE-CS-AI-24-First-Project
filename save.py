@@ -2,32 +2,41 @@ import json
 import os
 
 id = 0
-
+loaded_students = {}
 students = {
-    id + 1: {"name": "Amr", "age": 19, "grade": "C"},
-    id + 2: {"name": "Hossam", "age": 20, "grade": "B"},
-    id + 3: {"name": "Ali", "age": 20, "grade": "B+"},
+    "1": {"name": "Amr", "age": 19, "grade": "C"},
+    "2": {"name": "Hossam", "age": 20, "grade": "B"},
+    "3": {"name": "Ali", "age": 20, "grade": "B+"},
 }
 
 
 def save():
-    with open("tmp.json", "w") as f:
+    with open("tmp.txt", "w") as f:
         # note: ids are stored as strings not integers
-        json.dump(students, f)
+        for key ,value in students.items():
+            f.write(str(key)+"\n")
+            f.write(f"name:{value['name']},age:{value['age']},grade:{value['grade']}\n")
 
+            
 
 def load():
-    global students
+    global loaded_students
     global id
-    if os.path.exists("tmp.json"):
-        with open("tmp.json") as f:
-            # check if there is data in file
-            try:
-                students = json.load(f)
-                id = list(students.keys())[-1]
-            except Exception:
-                print("Nothing to load...")
+    # check if any data in saved
+    if os.path.exists("tmp.txt"):
+        with open("tmp.txt") as f:
+            st = f.read().split()
+            for i in range(0,len(st),2):
+                data_dict = {}
+                data = st[i+1].split(',')
+                for column in data:
+                    # print(column.split(":"))
+                    for key , value in column.split(":"):
+                        data_dict[key] = value
+                loaded_students[st[i]]= data_dict
+        print(loaded_students)
 
-
+            
+save()
 load()
-print(students)
+# print(students)
