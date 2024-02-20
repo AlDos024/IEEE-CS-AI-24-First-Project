@@ -3,7 +3,10 @@ import os
 id = 0
 last_loaded_id = 0
 loaded_students = {}
-students = {}
+students = {
+    1:{'first_name':'Amr','last_name':'omar','email':'amr@gmail.com','gender':'female','age':19,'gpa':3.79,'address':'Cairo'}
+}
+
 def add_students():
 
     def add_student():
@@ -47,14 +50,13 @@ def add_students():
 
         while True:
             try:
-                gpa = float(input("Enter student grade: "))
+                gpa = float(input("Enter student gpa: "))
                 if 0 <= gpa <= 4:
                     break
                 print("Invalid input. Please enter a value between 0 and 4.")
             except ValueError:
                 print("Invalid input.")
-
-        nonlocal students
+        # the id from file
         student_id = str(len(students) + 1)
         students[student_id] = {
             'first_name': first_name,
@@ -74,18 +76,6 @@ def add_students():
     print("Students successfully added!")
     return students
 
-# def display_students_data(students):
-#     for student_id, data in students.items():
-#         print(f"Student ID: {student_id}")
-#         print(f"First Name: {data['first_name']}")
-#         print(f"Last Name: {data['last_name']}")
-#         print(f"Email: {data['email']}")
-#         print(f"Gender: {data['gender']}")
-#         print(f"Age: {data['age']}")
-#         print(f"Address: {data['address']}")
-#         print(f"GPA: {data['gpa']}")
-#         print()
-
 def view_students():
     index = 0
     if len(students) != 0:
@@ -99,8 +89,8 @@ def view_students():
 
 def search_student(id):
     if students.get(id) != None :
-         print(f"ID:{id:<4} Name :{students.get(id)['name']:<10}Email :{students.get(id)['email']:<30}"
-                f"Age :{students.get(id)['age']:<7}Gpa :{students.get(id)['gpa']:<8}Address :{students.get(id)['address']}")
+         print(f"ID:{id:<4} Name :{students.get(id)['first_name']}{students.get(id)['last_name']:<10}Email :{students.get(id)['email']:<30}"
+                f"Age :{students.get(id)['age']:<7}Gpa :{students.get(id)['gpa']:<8}Address :{students.get(id)['address']},gender:{students.get(id)['gender']:<10}")
     else:
         print("No id") 
         
@@ -116,7 +106,15 @@ def update_student_details(student_id):
     choice = int(input("Enter your choice:"))
     if choice == 1:
         first_name = input("Enter student first name: ")
-        students[student_id]= {'first_name':first_name}
+        students[student_id]= {
+            'first_name': first_name,
+            'last_name': students.get(id)['last_name'],
+            'email': students.get(id)['email'],
+            'gender': students.get(id)['gender'],
+            'age': students.get(id)['age'],
+            'address': students.get(id)['address'],
+            'gpa': students.get(id)['gpa']
+        }
 
     elif choice == 2:
         last_name = input("Enter student last name: ")
@@ -154,7 +152,7 @@ def save():
     with open("tmp.txt", "w") as f:
         for key ,value in students.items():
             f.write(str(key)+"\n")
-            f.write(f"name:{value['name']},email:{value['email']},age:{value['age']},gpa:{value['gpa']},address:{value['address']}\n")
+            f.write(f"first name:{value['first_name']},last name:{value['last_name']},email:{value['email']},gender:{value['gender']},age:{value['age']},address:{value['address']},gpa:{value['gpa']}\n")
         f.close()
 
             
