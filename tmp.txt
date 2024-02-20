@@ -1,0 +1,10 @@
+1
+name:Amr,email:amr@gmail.com,age:19,gpa:3.79,address:Cairo
+2
+name:Hossam,email:ali@gmail.com,age:20,gpa:2.5,address:Tokyo
+3
+name:Ali,email:hossam@gmail.com,age:20,gpa:3.07,address:madrid
+4
+name:pol,email:pole@gmail.com,age:65,gpa:3.48,address:colo
+5
+name:water,email:pole@gmail.com,age:65,gpa:3.48,address:colo
