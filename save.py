@@ -26,7 +26,7 @@ def save():
 
 
 def load():
-    global loaded_students
+    global students
     global id
     # check if any data in saved
     if os.path.exists("tmp.txt"):
@@ -38,7 +38,13 @@ def load():
                 for column in data:
                     key, value = column.split(":")
                     data_dict[key] = value
-                loaded_students[int(st[i])] = data_dict
+                    
+                # if student in our database then overwrite
+                if not students.get(int(st[i])):
+                    students.get(int(st[i])).update(data_dict)
+
+                else:
+                    students[int(st[i])] = data_dict
     else:
         print("no data to load")
 
