@@ -35,8 +35,16 @@ def load():
     else:
         print("no data to load")
     # print(loaded_students)
+        
+# this should be called before starting the program to normalize the data
+def get_last_id():
+    global id
+    if os.path.exists("tmp.txt"):
+        with open("tmp.txt") as f:
+            st = f.read().split()
+            id = st[-2]
+
+
 
             
-save()
-load()
 # print(students)
