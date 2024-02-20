@@ -1,7 +1,7 @@
-import json
 import os
-
+# Note: change path(name of file).
 id = 0
+last_loaded_id = 0
 loaded_students = {}
 students = {
     "1": {"name": "Amr", "age": 19, "grade": "C"},
@@ -29,22 +29,21 @@ def load():
                 data_dict = {}
                 data = st[i+1].split(',')
                 for column in data:
-                    key_val = column.split(":")
-                    data_dict[key_val[0]] = key_val[1]
+                    key, value = column.split(":")
+                    data_dict[key] = value
                 loaded_students[int(st[i])]= data_dict
     else:
         print("no data to load")
-    # print(loaded_students)
+    print(loaded_students)
         
 # this should be called before starting the program to normalize the data
 def get_last_id():
     global id
+    global last_loaded_id
     if os.path.exists("tmp.txt"):
         with open("tmp.txt") as f:
             st = f.read().split()
             id = st[-2]
+            last_loaded_id = st[-2]
 
 
-
-            
-# print(students)
