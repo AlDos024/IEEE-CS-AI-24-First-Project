@@ -34,7 +34,6 @@ def load():
                 loaded_students[int(st[i])]= data_dict
     else:
         print("no data to load")
-    print(loaded_students)
         
 # this should be called before starting the program to normalize the data
 def get_last_id():
