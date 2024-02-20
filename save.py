@@ -12,7 +12,6 @@ students = {
 
 def save():
     with open("tmp.txt", "w") as f:
-        # note: ids are stored as strings not integers
         for key ,value in students.items():
             f.write(str(key)+"\n")
             f.write(f"name:{value['name']},age:{value['age']},grade:{value['grade']}\n")
@@ -30,11 +29,12 @@ def load():
                 data_dict = {}
                 data = st[i+1].split(',')
                 for column in data:
-                    # print(column.split(":"))
-                    for key , value in column.split(":"):
-                        data_dict[key] = value
-                loaded_students[st[i]]= data_dict
-        print(loaded_students)
+                    key_val = column.split(":")
+                    data_dict[key_val[0]] = key_val[1]
+                loaded_students[int(st[i])]= data_dict
+    else:
+        print("no data to load")
+    # print(loaded_students)
 
             
 save()
