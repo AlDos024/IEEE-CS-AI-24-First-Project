@@ -3,6 +3,9 @@ import os
 id = 0
 students = {}
 loaded = False
+added = False
+updated = False
+deleted = False
 
 
 # to not face errors in saving and loading
@@ -83,6 +86,8 @@ def get_gpa():
 
 def add_students():
 
+    global added
+
     def add_student():
         first_name = get_first_name()
         last_name = get_last_name()
@@ -117,8 +122,9 @@ def add_students():
     for _ in range(num_students):
         add_student()
 
-    print("Student(s) added successfully !")
+    added = True
 
+    print("Student(s) added successfully !")
 
 
 def search_student(id):
@@ -130,12 +136,12 @@ def search_student(id):
     else:
         print("Student not found")
 
-#no change
+
 def view_students():
     index = 1
     if len(students) != 0:
         for key, value in students.items():
-            # printing students and ding some foramat
+            # printing students and adding some foramat
             print(
                 f"{index}- ID:{key:<4} Name :{value['first_name']} {value['last_name']:<10} Email :{value['email']:<30}"
                 f" Age :{value['age']:<7} Gpa :{value['gpa']:<8} gender :{value['gender']:<6} Address :{value['address']}"
@@ -145,10 +151,9 @@ def view_students():
         print("No students to print! ")
 
 
-
-
 def update_student_details(student_id):
     global students
+    global updated
     print("What do you want to update ?")
     print("1 - first name")
     print("2 - last name")
@@ -191,12 +196,17 @@ def update_student_details(student_id):
     elif choice == -1:
         return
 
-    else: 
-        print("invaild input , please enter correct number")
+    else:
+        print("Invaild input , please enter correct number")
+
+    updated = True
 
 
 def delete_student(id):
+    global students
+    global deleted
     if students.get(id):
+        deleted = True
         students.pop(id)
         print(f"student with ID={id} deleted")
     else:
@@ -205,8 +215,8 @@ def delete_student(id):
 
 def save():
     global loaded
-    # if we did load the data
-    if loaded:
+    # if we did load the data and data was changed
+    if loaded and (added or updated or deleted):
         # overwrite file
         with open("database.txt", "w") as f:
             for key, value in students.items():
@@ -229,24 +239,31 @@ def save():
 def load():
     global students
     global loaded
+    global added
     loaded = True
     # check if any data is saved
     if os.path.exists("database.txt"):
         with open("database.txt") as f:
             st = f.read().strip("/")
             st = st.split("/")
+
             for i in range(0, len(st) - 1, 2):
                 data_dict = {}
                 data = st[i + 1].split(";")
+
                 for column in data:
                     key, value = column.split(":")
                     data_dict[key.strip("\n")] = value.strip("\n")
+
                 students[int(st[i])] = data_dict
-        # sort the dictionary after loading to avoid future bugs
-        keys = list(students.keys())
-        keys.sort()
-        students = {key: students[key] for key in keys}
-        print("---------- Data sucessfully loaded! ----------")
+
+        if added:
+            # sort the dictionary after loading to avoid future bugs
+            keys = list(students.keys())
+            keys.sort()
+            students = {key: students[key] for key in keys}
+            print("---------- Data sucessfully loaded! ----------")
+
     else:
         print("--------------- No data to load ---------------")
 
@@ -278,7 +295,7 @@ while True:
 
     try:
         choice = int(input("Enter your choice: "))
-        
+
         if choice == -1:
             break
 
