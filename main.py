@@ -2,57 +2,93 @@ import os
 
 id = 0
 students = {}
+overwrite = False
+loaded = False
+
+# to not face errors in saving and loading
+def removeChars(element):
+    element = element.replace("/", "")
+    element = element.replace(";", "")
+    element = element.replace(":", "")
+    return element
+
+def get_first_name():
+    while True:
+        first_name = input("Enter student first name: ")
+        if first_name.isalpha():
+            first_name = first_name.capitalize()
+            return first_name
+        print("Invalid input")
+
+
+def get_last_name():
+    while True:
+        last_name = input("Enter student last name: ")
+        if last_name.isalpha():
+            last_name = last_name.capitalize()
+            return last_name
+        print("Invalid input")
+
+
+def get_email():
+    while True:
+        email = input("Enter student email: ")
+        if email.strip() and "@" in email:
+            email = removeChars(email)
+            email = email.replace(" ", "")
+            if email:
+                return email
+        print("Invalid email address format.")
+
+
+def get_gender():
+    while True:
+        gender = input("Enter student gender (Male/Female): ").lower()
+        if gender in ["male", "female"]:
+            return gender
+        print("Gender must be either 'Male' or 'Female'.")
+
+
+def get_age():
+    while True:
+        try:
+            age = int(input("Enter student age as an integer from 6 to 100: "))
+            if 6 <= age <= 100:
+                return age
+            print("Invalid input. Please enter a value between 6 and 100.")
+        except ValueError:
+            print("Invalid input")
+
+
+def get_address():
+    address = input("Enter student address: ")
+    address = removeChars(address)
+    while not address.strip():
+        print("Address cannot be empty.")
+        address = input("Enter student address: ")
+    return address
+
+
+def get_gpa():
+    while True:
+        try:
+            gpa = float(input("Enter student gpa: "))
+            if 0 <= gpa <= 4:
+                return gpa
+            print("Invalid input. Please enter a value between 0 and 4.")
+        except ValueError:
+            print("Invalid input.")
 
 def add_students():
 
     def add_student():
-        while True:
-            first_name = input("Enter student first name: ")
-            if first_name.isalpha():
-                break
-            print("Invalid input")
-
-        while True:
-            last_name = input("Enter student last name: ")
-            if last_name.isalpha():
-                break
-            print("Invalid input")
-
-        while True:
-            email = input("Enter student email: ")
-            if email.strip() and "@" in email:
-                break
-            print("Invalid email address format.")
-
-        while True:
-            gender = input("Enter student gender (Male/Female): ").lower()
-            if gender in ["male", "female"]:
-                break
-            print("Gender must be either 'Male' or 'Female'.")
-
-        while True:
-            try:
-                age = int(input("Enter student age as an integer from 6 to 100: "))
-                if 6 <= age <= 100:
-                    break
-                print("Invalid input. Please enter a value between 6 and 100.")
-            except ValueError:
-                print("Invalid input")
-
-        address = input("Enter student address: ")
-        while not address.strip():
-            print("Address cannot be empty.")
-            address = input("Enter student address: ")
-
-        while True:
-            try:
-                gpa = float(input("Enter student gpa: "))
-                if 0 <= gpa <= 4:
-                    break
-                print("Invalid input. Please enter a value between 0 and 4.")
-            except ValueError:
-                print("Invalid input.")
-
+        first_name = get_first_name()
+        last_name = get_last_name()
+        email = get_email()
+        gender = get_gender()
+        age = get_age()
+        address = get_address()
+        gpa = get_gpa()
         # the id from file
         global id
         global students
@@ -70,7 +106,7 @@ def add_students():
     while True:
         num_students = input("How many students do you want to add? ")
         if num_students.isdigit():
-            if int(num_students) > 0:
+            if int(num_students) > -1:
                 num_students = int(num_students)
                 break
         else:
@@ -79,9 +115,9 @@ def add_students():
     for _ in range(num_students):
         add_student()
 
-    print("Students successfully added!")
+    print("Student(s) added successfully !")
 
-
+#no change
 def view_students():
     index = 0
     if len(students) != 0:
@@ -95,7 +131,7 @@ def view_students():
     else:
         print("No students to print! ")
 
-
+#no change
 def search_student(id):
     if students.get(id) != None:
         print(
@@ -107,6 +143,9 @@ def search_student(id):
 
 
 def update_student_details(student_id):
+    global overwrite
+    global students
+    overwrite = True
     while True:
         print("\nWhat do you want to update ?")
         print("1 - first name")
@@ -115,140 +154,38 @@ def update_student_details(student_id):
         print("4 - age")
         print("5 - gpa")
         print("6 - address")
-        print("7 - gender")
         print("(-1) if you want to exit update page:")
         choice = int(input("Enter your choice:"))
 
         if choice == 1:
-            while True:
-                first_name = input("Enter new student's first name: ")
-                if first_name.isalpha():
-                    break
-                print("Invalid input")
-
-            students[student_id] = {
-                "first_name": first_name,
-                "last_name": students.get(student_id)["last_name"],
-                "email": students.get(student_id)["email"],
-                "gender": students.get(student_id)["gender"],
-                "age": students.get(student_id)["age"],
-                "address": students.get(student_id)["address"],
-                "gpa": students.get(student_id)["gpa"],
-            }
+            first_name = get_first_name()
+            students.get(student_id)["first_name"] = first_name
             print("First name successfully updated")
 
         elif choice == 2:
-            while True:
-                last_name = input("Enter new student's last name: ")
-                if last_name.isalpha():
-                    break
-                print("Invalid input")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": last_name,
-                "email": students.get(student_id)["email"],
-                "gender": students.get(student_id)["gender"],
-                "age": students.get(student_id)["age"],
-                "address": students.get(student_id)["address"],
-                "gpa": students.get(student_id)["gpa"],
-            }
-            print("Last name successfully updated")
+            last_name = get_last_name()
+            students.get(student_id)["last_name"] = last_name
+            print("last name successfully updated")
 
         elif choice == 3:
-            while True:
-                email = input("Enter new student's email: ")
-                if email.strip() and "@" in email:
-                    break
-                print("Invalid email address format.")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": students.get(student_id)["last_name"],
-                "email": email,
-                "gender": students.get(student_id)["gender"],
-                "age": students.get(student_id)["age"],
-                "address": students.get(student_id)["address"],
-                "gpa": students.get(student_id)["gpa"],
-            }
+            email = get_email()
+            students.get(student_id)["email"] = email
             print("Email successfully updated")
 
         elif choice == 4:
-            while True:
-                try:
-                    age = int(input("Enter new student's age as an integer from 6 to 100: "))
-                    if 6 <= age <= 100:
-                        break
-                    print("Invalid input. Please enter a value between 6 and 100.")
-                except ValueError:
-                    print("Invalid input")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": students.get(student_id)["last_name"],
-                "email": students.get(student_id)["email"],
-                "gender": students.get(student_id)["gender"],
-                "age": age,
-                "address": students.get(student_id)["address"],
-                "gpa": students.get(student_id)["gpa"],
-            }
+            age = get_age()
+            students.get(student_id)["age"] = age
             print("Age successfully updated")
 
         elif choice == 5:
-            while True:
-                try:
-                    gpa = float(input("Enter new student's gpa: "))
-                    if 0 <= gpa <= 4:
-                        break
-                    print("Invalid input. Please enter a value between 0 and 4.")
-                except ValueError:
-                    print("Invalid input.")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": students.get(student_id)["last_name"],
-                "email": students.get(student_id)["email"],
-                "gender": students.get(student_id)["gender"],
-                "age": students.get(student_id)["age"],
-                "address": students.get(student_id)["address"],
-                "gpa": gpa,
-            }
+            gpa = get_gpa()
+            students.get(student_id)["gpa"] = gpa
             print("GPA successfully updated")
 
         elif choice == 6:
-            address = input("Enter new student's address: ")
-            while not address.strip():
-                print("Address cannot be empty.")
-                address = input("Enter student address: ")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": students.get(student_id)["last_name"],
-                "email": students.get(student_id)["email"],
-                "gender": students.get(student_id)["gender"],
-                "age": students.get(student_id)["age"],
-                "address": address,
-                "gpa": students.get(student_id)["gpa"],
-            }
+            address = get_address()
+            students.get(student_id)["address"] = address
             print("Address successfully updated")
-
-        elif choice == 7:
-            while True:
-                gender = input("Enter new student's gender (Male/Female): ").lower()
-                if gender in ["male", "female"]:
-                    break
-                print("Gender must be either 'Male' or 'Female'.")
-
-            students[student_id] = {
-                "first_name": students.get(student_id)["first_name"],
-                "last_name": students.get(student_id)["last_name"],
-                "email": students.get(student_id)["email"],
-                "gender": gender,
-                "age": students.get(student_id)["age"],
-                "address": students.get(student_id)["address"],
-                "gpa": students.get(student_id)["gpa"],
-            }
-            print("Gender successfully updated")
 
         elif choice == -1:
             break
@@ -258,7 +195,8 @@ def update_student_details(student_id):
 
 
 def delete_student(id):
-
+    global overwrite
+    overwrite = True
     if students.get(id) != None:
         students.pop(id)
         print(f"student with ID={id} deleted")
@@ -267,30 +205,47 @@ def delete_student(id):
 
 
 def save():
-    with open("database.txt", "w") as f:
-        for key, value in students.items():
-            f.write(str(key) + "\n")
-            f.write(
-                f"first_name:{value['first_name']},last_name:{value['last_name']},email:{value['email']},gender:{value['gender']},age:{value['age']},address:{value['address']},gpa:{value['gpa']}\n"
-            )
-        f.close()
+    global overwrite
+    global loaded
+    # delete or update and loaded the data
+    if overwrite and loaded:
+        # overwrite data
+        with open("database.txt", "w") as f:
+            for key, value in students.items():
+                f.write(str(key) + "/\n")
+                f.write(
+                    f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
+                )
+        overwrite = False
+    else:
+        # append if only new data worked on
+        with open("database.txt", "a") as f:
+            for key, value in students.items():
+                f.write(str(key) + "/\n")
+                f.write(
+                    f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
+                )
+    print("------- Your changes are saved! -------")
 
 
 def load():
     global students
+    global loaded
     global id
-    # check if any data in saved
+    loaded = True
+    # check if any data is saved
     if os.path.exists("database.txt"):
         with open("database.txt") as f:
-            st = f.read().split()
-            for i in range(0, len(st), 2):
+            st = f.read().strip("/")
+            st = st.split("/")
+            for i in range(0, len(st) - 1, 2):
                 data_dict = {}
-                data = st[i + 1].split(",")
+                data = st[i + 1].split(";")
                 for column in data:
                     key, value = column.split(":")
-                    data_dict[key] = value
+                    data_dict[key.strip("\n")] = value.strip("\n")
                 students[int(st[i])] = data_dict
-            f.close()
+            print("------- the data has been loaded! -------")
     else:
         print("no data to load")
 
@@ -298,18 +253,17 @@ def load():
 # this should be called before starting the program to normalize the data
 def get_last_id():
     global id
-    global last_loaded_id
     if os.path.exists("database.txt"):
         with open("database.txt") as f:
-            st = f.read().split()
+            st = f.read().strip()
             if st:
-                id = int(st[-2])
-                last_loaded_id = int(st[-2])
+                st = st.split("/")
+                id = int(st[-3])
 
 
 get_last_id()
 while True:
-    print("Welcome to Student Database Management System")
+    print("\nWelcome to Student Database Management System")
     print("What do you want to do? ")
     print("1 - Add Student ")
     print("2 - View Students")
@@ -339,7 +293,7 @@ while True:
 
         elif choice == 4:
             student_id = int(input("Enter student ID to update details: "))
-            if students.get(student_id) != None:
+            if students.get(student_id):
                 update_student_details(student_id)
                 print("Student details updated successfully.")
             else:
@@ -357,5 +311,6 @@ while True:
 
         else:
             print("you input is wrong!!")
+
     except ValueError:
         print("you input is wrong!!")
