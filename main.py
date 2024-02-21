@@ -3,6 +3,7 @@ import os
 id = 0
 students = {}
 overwrite = False
+loaded = False
 # to not face errors in saving and loading
 def removeChars(element):
     element = element.replace('/','')
@@ -175,7 +176,7 @@ def delete_student(id):
 
 
 def save():
-    if overwrite:
+    if overwrite and loaded:
         # overwrites data
         with open("database.txt", "w") as f:
             for key, value in students.items():
@@ -193,7 +194,9 @@ def save():
 
 def load():
     global students
+    global loaded
     global id
+    loaded = True
     # check if any data in saved
     if os.path.exists("database.txt"):
         with open("database.txt") as f:
@@ -212,7 +215,6 @@ def load():
 # this should be called before starting the program to normalize the data
 def get_last_id():
     global id
-    global last_loaded_id
     if os.path.exists("database.txt"):
         with open("database.txt") as f:
             st = f.read().split("/")
