@@ -1,8 +1,14 @@
 import os
 
-# Note: change path(name of file).
 id = 0
 students = {}
+overwrite = False
+# to not face errors in saving and loading
+def removeChars(element):
+    element = element.replace('/','')
+    element = element.replace(';','')
+    element = element.replace(':','')
+    return element
 
 
 def add_students():
@@ -11,19 +17,24 @@ def add_students():
         while True:
             first_name = input("Enter student first name: ")
             if first_name.isalpha():
+                first_name = first_name.capitalize()
                 break
             print("Invalid input")
 
         while True:
             last_name = input("Enter student last name: ")
             if last_name.isalpha():
+                last_name = last_name.capitalize()
                 break
             print("Invalid input")
 
         while True:
             email = input("Enter student email: ")
             if email.strip() and "@" in email:
-                break
+                email = removeChars(email)
+                email = email.replace(" ","")
+                if email:
+                    break
             print("Invalid email address format.")
 
         while True:
@@ -42,7 +53,8 @@ def add_students():
                 print("Invalid input")
 
         address = input("Enter student address: ")
-        while not address.strip():
+        address = removeChars(address)
+        while not address.strip() :
             print("Address cannot be empty.")
             address = input("Enter student address: ")
 
@@ -81,16 +93,16 @@ def add_students():
     for _ in range(num_students):
         add_student()
 
-    print("Students successfully added!")
+    print("Student(s) successfully added!")
 
 
 def view_students():
-    index = 0
+    index = 1
     if len(students) != 0:
         for key, value in students.items():
             # printing students and ding some foramat
             print(
-                f"{index + 1}- ID:{key:<4} Name :{value['first_name']} {value['last_name']:<10} Email :{value['email']:<30}"
+                f"{index}- ID:{key:<4} Name :{value['first_name']} {value['last_name']:<10} Email :{value['email']:<30}"
                 f"Age :{value['age']:<7}Gpa :{value['gpa']:<8}Address :{value['address']}"
             )
             index += 1
@@ -99,7 +111,7 @@ def view_students():
 
 
 def search_student(id):
-    if students.get(id) != None:
+    if students.get(id):
         print(
             f"ID:{id:<4} Name :{students.get(id)['first_name']}{students.get(id)['last_name']:<10}Email :{students.get(id)['email']:<30}"
             f"Age :{students.get(id)['age']:<7}Gpa :{students.get(id)['gpa']:<8}Address :{students.get(id)['address']},gender:{students.get(id)['gender']:<10}"
@@ -109,6 +121,8 @@ def search_student(id):
 
 
 def update_student_details(student_id):
+    global overwrite
+    overwrite = True
     print("What do you want to update ?")
     print("1 - first name")
     print("2 - last name")
@@ -120,7 +134,7 @@ def update_student_details(student_id):
     if choice == 1:
         first_name = input("Enter student first name: ")
         students[student_id] = {
-            "first_name": first_name,
+            "first_name": first_name.capitalize(),
             "last_name": students.get(id)["last_name"],
             "email": students.get(id)["email"],
             "gender": students.get(id)["gender"],
@@ -131,7 +145,7 @@ def update_student_details(student_id):
 
     elif choice == 2:
         last_name = input("Enter student last name: ")
-        students[student_id] = {"last_name": last_name}
+        students[student_id] = {"last_name": last_name.capitalize()}
 
     elif choice == 3:
         email = input("Enter student email : ")
@@ -151,8 +165,9 @@ def update_student_details(student_id):
 
 
 def delete_student(id):
-
-    if students.get(id) != None:
+    global overwrite
+    overwrite = True
+    if students.get(id):
         students.pop(id)
         print(f"student with ID={id} deleted")
     else:
@@ -160,30 +175,36 @@ def delete_student(id):
 
 
 def save():
-    with open("tmp.txt", "w") as f:
-        for key, value in students.items():
-            f.write(str(key) + "\n")
-            f.write(
-                f"first_name:{value['first_name']},last_name:{value['last_name']},email:{value['email']},gender:{value['gender']},age:{value['age']},address:{value['address']},gpa:{value['gpa']}\n"
-            )
-        f.close()
-
+    if overwrite:
+        # overwrites data
+        with open("database.txt", "w") as f:
+            for key, value in students.items():
+                f.write(str(key) + "/\n")
+                f.write(
+                    f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
+                )
+    else:
+        with open("database.txt", "a") as f:
+            for key, value in students.items():
+                f.write(str(key) + "/\n")
+                f.write(
+                    f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
+                )
 
 def load():
     global students
     global id
     # check if any data in saved
-    if os.path.exists("tmp.txt"):
-        with open("tmp.txt") as f:
-            st = f.read().split()
-            for i in range(0, len(st), 2):
+    if os.path.exists("database.txt"):
+        with open("database.txt") as f:
+            st = f.read().split("/")
+            for i in range(0, len(st)-1, 2):
                 data_dict = {}
-                data = st[i + 1].split(",")
+                data = st[i + 1].split(";")
                 for column in data:
                     key, value = column.split(":")
-                    data_dict[key] = value
+                    data_dict[key.strip("\n")] = value.strip("\n")
                 students[int(st[i])] = data_dict
-            f.close()
     else:
         print("no data to load")
 
@@ -192,12 +213,11 @@ def load():
 def get_last_id():
     global id
     global last_loaded_id
-    if os.path.exists("tmp.txt"):
-        with open("tmp.txt") as f:
-            st = f.read().split()
+    if os.path.exists("database.txt"):
+        with open("database.txt") as f:
+            st = f.read().split("/")
             if st:
-                id = int(st[-2])
-                last_loaded_id = int(st[-2])
+                id = int(st[-3])
 
 
 get_last_id()
@@ -232,7 +252,7 @@ while True:
 
         elif choice == 4:
             student_id = int(input("Enter student ID to update details: "))
-            if students.get(student_id) != None:
+            if students.get(student_id):
                 update_student_details(student_id)
                 print("Student details updated successfully.")
             else:
