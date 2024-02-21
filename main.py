@@ -262,7 +262,7 @@ def load():
             keys = list(students.keys())
             keys.sort()
             students = {key: students[key] for key in keys}
-            print("---------- Data sucessfully loaded! ----------")
+        print("---------- Data sucessfully loaded! ----------")
 
     else:
         print("--------------- No data to load ---------------")
