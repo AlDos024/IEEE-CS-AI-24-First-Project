@@ -2,7 +2,6 @@ import os
 
 id = 0
 students = {}
-overwrite = False
 loaded = False
 
 
@@ -146,9 +145,7 @@ def search_student(id):
 
 
 def update_student_details(student_id):
-    global overwrite
     global students
-    overwrite = True
     print("What do you want to update ?")
     print("1 - first name")
     print("2 - last name")
@@ -184,8 +181,6 @@ def update_student_details(student_id):
 
 
 def delete_student(id):
-    global overwrite
-    overwrite = True
     if students.get(id):
         students.pop(id)
         print(f"student with ID={id} deleted")
@@ -194,18 +189,17 @@ def delete_student(id):
 
 
 def save():
-    global overwrite
     global loaded
-    # delete or update and loaded the data
-    if overwrite and loaded:
-        # overwrite data
+    # if we did load the data
+    if loaded:
+        # overwrite file
         with open("database.txt", "w") as f:
             for key, value in students.items():
                 f.write(str(key) + "/\n")
                 f.write(
                     f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
                 )
-        overwrite = False
+
     else:
         # append if only new data worked on
         with open("database.txt", "a") as f:
@@ -234,8 +228,13 @@ def load():
                     key, value = column.split(":")
                     data_dict[key.strip("\n")] = value.strip("\n")
                 students[int(st[i])] = data_dict
+        # sort the dictionary after loading to avoid future bugs
+        keys = list(students.keys())
+        keys.sort()
+        students = {key: students[key] for key in keys}
+        print("---------- Data sucessfully loaded! ----------")
     else:
-        print("no data to load")
+        print("--------------- No data to load ---------------")
 
 
 # this should be called before starting the program to normalize the data
@@ -250,6 +249,7 @@ def get_last_id():
 
 
 get_last_id()
+
 while True:
     print("<-------- Welcome to Student Database Management System -------->")
     print("What do you want to do? ")
