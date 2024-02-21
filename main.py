@@ -229,7 +229,6 @@ def save():
 def load():
     global students
     global loaded
-    global id
     loaded = True
     # check if any data is saved
     if os.path.exists("database.txt"):
