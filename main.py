@@ -158,41 +158,41 @@ def update_student_details(student_id):
     print("6 - address")
     choice = int(input("Enter your choice: "))
 
-        if choice == 1:
-            first_name = get_first_name()
-            students.get(student_id)["first_name"] = first_name
-            print("First name successfully updated")
+    if choice == 1:
+        first_name = get_first_name()
+        students.get(student_id)["first_name"] = first_name
+        print("First name successfully updated")
 
-        elif choice == 2:
-            last_name = get_last_name()
-            students.get(student_id)["last_name"] = last_name
-            print("last name successfully updated")
+    elif choice == 2:
+        last_name = get_last_name()
+        students.get(student_id)["last_name"] = last_name
+        print("last name successfully updated")
 
-        elif choice == 3:
-            email = get_email()
-            students.get(student_id)["email"] = email
-            print("Email successfully updated")
+    elif choice == 3:
+        email = get_email()
+        students.get(student_id)["email"] = email
+        print("Email successfully updated")
 
-        elif choice == 4:
-            age = get_age()
-            students.get(student_id)["age"] = age
-            print("Age successfully updated")
+    elif choice == 4:
+        age = get_age()
+        students.get(student_id)["age"] = age
+        print("Age successfully updated")
 
-        elif choice == 5:
-            gpa = get_gpa()
-            students.get(student_id)["gpa"] = gpa
-            print("GPA successfully updated")
+    elif choice == 5:
+        gpa = get_gpa()
+        students.get(student_id)["gpa"] = gpa
+        print("GPA successfully updated")
 
-        elif choice == 6:
-            address = get_address()
-            students.get(student_id)["address"] = address
-            print("Address successfully updated")
+    elif choice == 6:
+        address = get_address()
+        students.get(student_id)["address"] = address
+        print("Address successfully updated")
 
-        elif choice == -1:
-            break
+    elif choice == -1:
+        return
 
-        else: 
-           print("invaild input , please enter correct number")
+    else: 
+        print("invaild input , please enter correct number")
 
 
 def delete_student(id):
