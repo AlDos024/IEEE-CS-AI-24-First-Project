@@ -3,7 +3,6 @@ import os
 id = 0
 students = {}
 
-
 def add_students():
 
     def add_student():
@@ -90,7 +89,7 @@ def view_students():
             # printing students and ding some foramat
             print(
                 f"{index + 1}- ID:{key:<4} Name :{value['first_name']} {value['last_name']:<10} Email :{value['email']:<30}"
-                f"Age :{value['age']:<7}Gpa :{value['gpa']:<8}Address :{value['address']}"
+                f" Age :{value['age']:<7} Gpa :{value['gpa']:<8} gender :{value['gender']:<6} Address :{value['address']}"
             )
             index += 1
     else:
@@ -100,53 +99,162 @@ def view_students():
 def search_student(id):
     if students.get(id) != None:
         print(
-            f"ID:{id:<4} Name :{students.get(id)['first_name']}{students.get(id)['last_name']:<10}Email :{students.get(id)['email']:<30}"
-            f"Age :{students.get(id)['age']:<7}Gpa :{students.get(id)['gpa']:<8}Address :{students.get(id)['address']},gender:{students.get(id)['gender']:<10}"
+            f"ID:{id:<4} Name :{students.get(id)['first_name']}{students.get(id)['last_name']:<10}Email :{students.get(id)['email']:<20}"
+            f"Age :{students.get(id)['age']:<7}Gpa :{students.get(id)['gpa']:<6} gender :{students.get(id)['gender']:<12} Address :{students.get(id)['address']},gender:{students.get(id)['gender']:<10}"
         )
     else:
         print("No id")
 
 
 def update_student_details(student_id):
-    print("What do you want to update ?")
-    print("1 - first name")
-    print("2 - last name")
-    print("3 - email")
-    print("4 - age")
-    print("5 - gpa")
-    print("6 - address")
-    choice = int(input("Enter your choice:"))
-    if choice == 1:
-        first_name = input("Enter student first name: ")
-        students[student_id] = {
-            "first_name": first_name,
-            "last_name": students.get(id)["last_name"],
-            "email": students.get(id)["email"],
-            "gender": students.get(id)["gender"],
-            "age": students.get(id)["age"],
-            "address": students.get(id)["address"],
-            "gpa": students.get(id)["gpa"],
-        }
+    while True:
+        print("\nWhat do you want to update ?")
+        print("1 - first name")
+        print("2 - last name")
+        print("3 - email")
+        print("4 - age")
+        print("5 - gpa")
+        print("6 - address")
+        print("7 - gender")
+        print("(-1) if you want to exit update page:")
+        choice = int(input("Enter your choice:"))
 
-    elif choice == 2:
-        last_name = input("Enter student last name: ")
-        students[student_id] = {"last_name": last_name}
+        if choice == 1:
+            while True:
+                first_name = input("Enter new student's first name: ")
+                if first_name.isalpha():
+                    break
+                print("Invalid input")
 
-    elif choice == 3:
-        email = input("Enter student email : ")
-        students[student_id] = {"email": email}
+            students[student_id] = {
+                "first_name": first_name,
+                "last_name": students.get(student_id)["last_name"],
+                "email": students.get(student_id)["email"],
+                "gender": students.get(student_id)["gender"],
+                "age": students.get(student_id)["age"],
+                "address": students.get(student_id)["address"],
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("First name successfully updated")
 
-    elif choice == 4:
-        age = input("Enter student age : ")
-        students[student_id] = {"age": age}
+        elif choice == 2:
+            while True:
+                last_name = input("Enter new student's last name: ")
+                if last_name.isalpha():
+                    break
+                print("Invalid input")
 
-    elif choice == 5:
-        gpa = input("Enter student gpa : ")
-        students[student_id] = {"gpa": gpa}
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": last_name,
+                "email": students.get(student_id)["email"],
+                "gender": students.get(student_id)["gender"],
+                "age": students.get(student_id)["age"],
+                "address": students.get(student_id)["address"],
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("Last name successfully updated")
 
-    elif choice == 6:
-        address = input("Enter student address: ")
-        students[student_id] = {"address": address}
+        elif choice == 3:
+            while True:
+                email = input("Enter new student's email: ")
+                if email.strip() and "@" in email:
+                    break
+                print("Invalid email address format.")
+
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": students.get(student_id)["last_name"],
+                "email": email,
+                "gender": students.get(student_id)["gender"],
+                "age": students.get(student_id)["age"],
+                "address": students.get(student_id)["address"],
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("Email successfully updated")
+
+        elif choice == 4:
+            while True:
+                try:
+                    age = int(input("Enter new student's age as an integer from 6 to 100: "))
+                    if 6 <= age <= 100:
+                        break
+                    print("Invalid input. Please enter a value between 6 and 100.")
+                except ValueError:
+                    print("Invalid input")
+
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": students.get(student_id)["last_name"],
+                "email": students.get(student_id)["email"],
+                "gender": students.get(student_id)["gender"],
+                "age": age,
+                "address": students.get(student_id)["address"],
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("Age successfully updated")
+
+        elif choice == 5:
+            while True:
+                try:
+                    gpa = float(input("Enter new student's gpa: "))
+                    if 0 <= gpa <= 4:
+                        break
+                    print("Invalid input. Please enter a value between 0 and 4.")
+                except ValueError:
+                    print("Invalid input.")
+
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": students.get(student_id)["last_name"],
+                "email": students.get(student_id)["email"],
+                "gender": students.get(student_id)["gender"],
+                "age": students.get(student_id)["age"],
+                "address": students.get(student_id)["address"],
+                "gpa": gpa,
+            }
+            print("GPA successfully updated")
+
+        elif choice == 6:
+            address = input("Enter new student's address: ")
+            while not address.strip():
+                print("Address cannot be empty.")
+                address = input("Enter student address: ")
+
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": students.get(student_id)["last_name"],
+                "email": students.get(student_id)["email"],
+                "gender": students.get(student_id)["gender"],
+                "age": students.get(student_id)["age"],
+                "address": address,
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("Address successfully updated")
+
+        elif choice == 7:
+            while True:
+                gender = input("Enter new student's gender (Male/Female): ").lower()
+                if gender in ["male", "female"]:
+                    break
+                print("Gender must be either 'Male' or 'Female'.")
+
+            students[student_id] = {
+                "first_name": students.get(student_id)["first_name"],
+                "last_name": students.get(student_id)["last_name"],
+                "email": students.get(student_id)["email"],
+                "gender": gender,
+                "age": students.get(student_id)["age"],
+                "address": students.get(student_id)["address"],
+                "gpa": students.get(student_id)["gpa"],
+            }
+            print("Gender successfully updated")
+
+        elif choice == -1:
+            break
+
+        else: 
+           print("invaild input , please enter correct number")
 
 
 def delete_student(id):
