@@ -26,9 +26,7 @@ while True:
             crud.add_students()
 
         elif choice == 2:
-            print("------------------------------------")
             crud.view_students()
-            print("------------------------------------")
 
         elif choice == 3:
 
@@ -39,7 +37,6 @@ while True:
             student_id = int(input("Enter student ID to update details: "))
             if globals.students.get(student_id):
                 crud.update_student_details(student_id)
-                print("Student details updated successfully.")
             else:
                 print("Student not found.")
 
@@ -59,4 +56,4 @@ while True:
             print("you input is wrong!!")
 
     except ValueError:
-        print("you input is wrong!!")
+        print("\nyou input is wrong!!")

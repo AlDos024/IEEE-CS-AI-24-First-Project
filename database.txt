@@ -1,0 +1,10 @@
+1/
+first_name:Ali;last_name:Dos;email:ali@gmail.com;gender:male;age:25;address:dcsdv sac;gpa:2.34/
+2/
+first_name:Lolo;last_name:Moq;email:nscjwndcosj@gmail.com;gender:female;age:99;address:oidvnowndv;gpa:3.9/
+3/
+first_name:Marwan;last_name:Moh;email:mor@;gender:male;age:22;address:afadj sd;gpa:3.6/
+5/
+first_name:Ali;last_name:Dos;email:amjdos02192@gmail.com;gender:male;age:26;address:Cairo;gpa:3.2/
+6/
+first_name:Marwan;last_name:Mo;email:ascmawkdc@gmail.com;gender:male;age:36;address:Tokyo;gpa:3.6/

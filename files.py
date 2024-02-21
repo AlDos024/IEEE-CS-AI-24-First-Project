@@ -1,5 +1,7 @@
 import os
 import globals
+
+
 def save():
     # if we did load the data and data was changed
     if globals.loaded and (globals.added or globals.updated or globals.deleted):
@@ -20,6 +22,8 @@ def save():
                     f"first_name:{value['first_name']};last_name:{value['last_name']};email:{value['email']};gender:{value['gender']};age:{value['age']};address:{value['address']};gpa:{value['gpa']}/\n"
                 )
     print("------- Your changes are saved! -------")
+    globals.cls(1.75)
+    
 
 
 def load():
@@ -46,9 +50,12 @@ def load():
             keys.sort()
             globals.students = {key: globals.students[key] for key in keys}
         print("---------- Data sucessfully loaded! ----------")
+        
 
     else:
         print("--------------- No data to load ---------------")
+
+    globals.cls(1.75)
 
 
 # this should be called before starting the program to normalize the data
